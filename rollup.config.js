@@ -3,16 +3,16 @@ import commonjs from "@rollup/plugin-commonjs";
 import json from "@rollup/plugin-json";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
 import serve from "rollup-plugin-serve";
-import terser  from "@rollup/plugin-terser";
+import terser from "@rollup/plugin-terser";
 import typescript from "@rollup/plugin-typescript";
-import minifyHTML from 'rollup-plugin-minify-html-literals';
+import minifyHTML from "rollup-plugin-minify-html-literals";
 
 const dev = process.env.ROLLUP_WATCH;
 
 const serveOptions = {
   contentBase: ["./dist"],
   host: "0.0.0.0",
-  port: 5001,
+  port: 5000,
   allowCrossOrigin: true,
   headers: {
     "Access-Control-Allow-Origin": "*",
@@ -26,7 +26,7 @@ export default [
       {
         dir: "dist",
         format: "es",
-        inlineDynamicImports: true,
+        inlineDynamicImports: false,
       },
     ],
     plugins: [
@@ -45,6 +45,7 @@ export default [
         babelHelpers: "bundled",
       }),
       ...(dev ? [serve(serveOptions)] : [terser()]),
+      ...(dev ? [serve(serveOptions)] : []),
     ],
     moduleContext: (id) => {
       const thisAsWindowForModules = [
